@@ -21,7 +21,7 @@ class TicketView extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return SizedBox(
       width: size.width * 0.85,
-      height: 189,
+      height: 180,
       child: Container(
         margin: EdgeInsets.only(right: wholeScreen == true ? 0 : 16),
         child: Column(
@@ -103,27 +103,34 @@ class TicketView extends StatelessWidget {
               ),
             ),
             Container(
-              height: 20,
-              color: AppStyles.ticketOrange,
-              child: const Row(
+              // height: 20,
+              color: isColor == null ? AppStyles.ticketOrange : AppStyles.ticketWhite,
+              child: Row(
                 children: [
-                  BigCircle(isRight: false),
+                  BigCircle(
+                      isRight: false,
+                      isColor : isColor,
+                  ),
                   Expanded(
                       child: AppLayoutbuilderWidget(
                     randomDivider: 16,
                     width: 6,
+                        isColor: isColor,
                   )),
-                  BigCircle(isRight: true)
+                  BigCircle(
+                      isRight: true,
+                      isColor: isColor,
+                  )
                 ],
               ),
             ),
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                  color: AppStyles.ticketOrange,
-                  borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular((21)),
-                      bottomRight: Radius.circular(21))),
+                  color: isColor == null ? AppStyles.ticketOrange : AppStyles.ticketWhite,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular((isColor == null ? 21 : 0)),
+                      bottomRight: Radius.circular(isColor == null ? 21 : 0))),
               child: Column(
                 children: [
                   // show departure and destination with icons first line
@@ -134,16 +141,19 @@ class TicketView extends StatelessWidget {
                         topText: ticket["date"],
                         bottomText: "Date",
                         alignment: CrossAxisAlignment.start,
+                        isColor: isColor,
                       ),
                       AppColumnTextLayout(
                         topText: ticket["departure_time"],
                         bottomText: "Departure Time",
                         alignment: CrossAxisAlignment.center,
+                        isColor: isColor,
                       ),
                       AppColumnTextLayout(
                         topText: ticket["number"].toString(),
                         bottomText: "Number",
                         alignment: CrossAxisAlignment.end,
+                        isColor: isColor,
                       ),
                     ],
                   ),
