@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ticket_project/Base/bottom_nav_bar.dart';
 import 'package:ticket_project/Base/utils/app_routes.dart';
 import 'package:ticket_project/screens/home/all_hotels.dart';
@@ -8,7 +9,9 @@ import 'package:ticket_project/screens/hotel_detail.dart';
 import 'package:ticket_project/screens/ticket/ticket_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+      ProviderScope(child: const MyApp())
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,7 +19,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
         AppRoutes.homePage: (context) => BottomNavBar(),

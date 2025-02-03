@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:ticket_project/Base/res/styles/app_styles.dart';
 import 'package:ticket_project/Base/utils/all_json.dart';
 import 'package:ticket_project/controller/text_expansion_controller.dart';
+import 'package:ticket_project/provider/text_expansion_provider.dart';
 
 class HotelDetail extends StatefulWidget {
   const HotelDetail({super.key});
@@ -115,37 +117,35 @@ class _HotelDetailState extends State<HotelDetail> {
   }
 }
 
-class ExpandedTextWidget extends StatelessWidget {
+class ExpandedTextWidget extends ConsumerWidget {
   ExpandedTextWidget({super.key, required this.text});
   final String text;
 
-  final TextExpansionController controller = Get.put(TextExpansionController());
   @override
-  Widget build(BuildContext context) {
-    return Obx(() {
-      var textwidget = Text(
-        text,
-        maxLines: controller.isExpanded.value ? null : 9,
-        overflow: controller.isExpanded.value
-            ? TextOverflow.visible
-            : TextOverflow.ellipsis,
-      );
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          textwidget,
-          GestureDetector(
-            onTap: () {
-              controller.toggleExpansion();
-            },
-            child: Text(
-              controller.isExpanded.value ? 'Less' : 'More',
-              style:
-                  AppStyles.textStyle.copyWith(color: AppStyles.primaryColor),
-            ),
-          )
-        ],
-      );
-    });
+  Widget build(BuildContext context, WidgetRef ref) {
+    var provider = ref.watch(textExpansionNotifierProvider);
+    var textwidget = Text(
+      text,
+      maxLines: provider ? null : 9,
+      overflow: provider
+          ? TextOverflow.visible
+          : TextOverflow.ellipsis,
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        textwidget,
+        GestureDetector(
+          onTap: () {
+            ref.watch(textExpansionNotifierProvider.notifier).toggleText(provider);
+          },
+          child: Text(
+            provider ? 'Less' : 'More',
+            style:
+            AppStyles.textStyle.copyWith(color: AppStyles.primaryColor),
+          ),
+        )
+      ],
+    );
   }
 }
