@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +7,7 @@ import 'package:ticket_project/Base/res/styles/app_styles.dart';
 import 'package:ticket_project/Base/utils/all_json.dart';
 import 'package:ticket_project/Base/utils/app_routes.dart';
 import 'package:ticket_project/Base/widgets/app_double_text.dart';
+import 'package:ticket_project/Base/widgets/heading_text.dart';
 import 'package:ticket_project/Base/widgets/ticket_view.dart';
 import 'package:ticket_project/screens/home/widgets/hotel.dart';
 
@@ -37,7 +36,7 @@ class HomeScreen extends StatelessWidget {
                         const SizedBox(
                           height: 5,
                         ),
-                        Text("Book Tickets", style: AppStyles.headLineStyle1),
+                        const HeadingText(text: "Book Tickets", isColor: false),
                       ],
                     ),
                     Container(
@@ -72,32 +71,52 @@ class HomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 40),
                 AppDoubleText(
-                    bigText: "Upcoming Flights", smallText: "View all",
-                    func:  () => Navigator.pushNamed(context, AppRoutes.allTickets),
+                  bigText: "Upcoming Flights",
+                  smallText: "View all",
+                  func: () =>
+                      Navigator.pushNamed(context, AppRoutes.allTickets),
                 ),
                 const SizedBox(height: 20),
                 SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
+                    scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: ticketList.take(2).map((singleTicket) => TicketView(ticket: singleTicket)
-                      ).toList(),
-                    )
-                ),
+                      children: ticketList
+                          .take(2)
+                          .map((singleTicket) => GestureDetector(
+                              onTap: () {
+                                var index = ticketList.indexOf(singleTicket);
+                                print("I am tapped on the ticket $index");
+                                Navigator.pushNamed(
+                                    context, AppRoutes.ticketScreen,
+                                    arguments: {"index": index});
+                              },
+                              child: TicketView(ticket: singleTicket)))
+                          .toList(),
+                    )),
                 const SizedBox(height: 40),
                 AppDoubleText(
-                    bigText: "Hotels", smallText: "View all",
-                    func:  (){
-                      Navigator.pushNamed(context, AppRoutes.allHotels);
-                    },
+                  bigText: "Hotels",
+                  smallText: "View all",
+                  func: () {
+                    Navigator.pushNamed(context, AppRoutes.allHotels);
+                  },
                 ),
                 const SizedBox(height: 20),
                 SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
+                    scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: hotelList.take(3).map((singleHotel) => Hotel(hotel: singleHotel)
-                      ).toList(),
-                    )
-                )
+                      children: hotelList
+                          .take(3)
+                          .map((singleHotel) => GestureDetector(
+                              onTap: () {
+                                var index = hotelList.indexOf(singleHotel);
+                                Navigator.pushNamed(
+                                    context, AppRoutes.hotelDetail,
+                                    arguments: {"index": index});
+                              },
+                              child: Hotel(hotel: singleHotel)))
+                          .toList(),
+                    ))
               ],
             ),
           ),
